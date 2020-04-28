@@ -176,3 +176,63 @@ extension UINavigationController {
         objc_setAssociatedObject(self, &TransitionAssociatekeys.transitionControllerKey, nil, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
     }
 }
+
+/*
+//MARK:- 提供几个便利的转场api
+extension UIViewController {
+    
+    @objc func lblDefinePresentViewController(viewController : UIViewController) -> Void {
+        self.lblDefinePresentViewController(viewController: viewController, formDirection: .bottomToTop)
+    }
+    
+    @objc func lblDefinePresentViewController(viewController : UIViewController, formDirection : TranslateDirection) -> Void {
+    }
+
+    @objc func lblDefinePresentViewController(viewController : UIViewController, formDirection : TranslateDirection, animate : Bool) -> Void {
+        
+        LBLTrasitionViewController *controller = [[LBLTrasitionViewController alloc] initWithPresentedViewController:viewController presentingViewController:self];
+        viewController.transitioningDelegate = controller;
+        TranslateTransition *translateAnimate = [[TranslateTransition alloc] init];
+        translateAnimate.showDirection = direction;
+        
+        switch (direction) {
+            case TranslateDirectionLeftToRight:
+            {
+                translateAnimate.hideDirection = TranslateDirectionRightToLeft;
+                translateAnimate.dockPosition = TTDockPositionLeftCenter;
+                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                    if (viewController.view.superview) {
+                        TranslateInteractive *hideInteractive = [[TranslateInteractive alloc] initWithDirection:TranslateInteractiveDirectionRightToLeft];
+                        [hideInteractive addInteractiveGestureToView:viewController.view];
+                        @weakify(viewController)
+                        hideInteractive.interactiveDidBegin = ^BOOL{
+                            [weak_viewController dismissViewControllerAnimated:YES completion:NULL];
+                            return YES;
+                        };
+                        viewController.hideInteractive = hideInteractive;
+                    }
+                });
+                break;
+            }
+            case TranslateDirectionRightToLeft:
+                translateAnimate.hideDirection = TranslateDirectionLeftToRight;
+                translateAnimate.dockPosition = TTDockPositionRightCenter;
+                break;
+            case TranslateDirectionBottomToTop:
+                translateAnimate.hideDirection = TranslateDirectionTopToBottom;
+                translateAnimate.dockPosition = TTDockPositionBottomCenter;
+                break;
+            case TranslateDirectionTopToBottom:
+                translateAnimate.hideDirection = TranslateDirectionBottomToTop;
+                translateAnimate.dockPosition = TTDockPositionTopCenter;
+                break;
+            default:
+                break;
+        }
+
+        viewController.transitionAnimate = translateAnimate;
+        [self presentViewController:viewController animated:animate completion:completion];
+    }
+
+}
+*/
