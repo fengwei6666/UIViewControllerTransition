@@ -7,7 +7,6 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "LBLAnimatedTransitioning.h"
 
 /**
  转场控制器类，负责转场控制
@@ -17,8 +16,5 @@
        此处提供了一个从左至右的动画效果。
  */
 @interface LBLTrasitionViewController : UIPresentationController<UIViewControllerTransitioningDelegate>
-
-// 动画执行者
-@property (nonatomic, strong) LBLAnimatedTransitioning *animTransition;
 
 @end

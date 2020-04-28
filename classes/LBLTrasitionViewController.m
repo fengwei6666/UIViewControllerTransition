@@ -16,6 +16,9 @@
 @end
 
 @implementation LBLTrasitionViewController
+{
+    __weak TranslateInteractive *_currentInterActive;
+}
 
 #pragma mark - lifeCycle
 
@@ -39,13 +42,25 @@
 
 // 返回的对象控制Presented时的动画 (开始动画的具体细节负责类)
 - (id<UIViewControllerAnimatedTransitioning>)animationControllerForPresentedController:(UIViewController *)presented presentingController:(UIViewController *)presenting sourceController:(UIViewController *)source {
-    self.animTransition.presentedViewController = presented;
-    self.animTransition.presentingViewController = presenting;
-    return self.animTransition;
+    presented.transitionAnimate.animateType = TransitionAnimateTypeShow;
+    _currentInterActive = presented.showInteractive;
+    return presented.transitionAnimate;
 }
 // 由返回的控制器控制dismissed时的动画 (结束动画的具体细节负责类)
 - (id<UIViewControllerAnimatedTransitioning>)animationControllerForDismissedController:(UIViewController *)dismissed {
-    return self.animTransition;
+    dismissed.transitionAnimate.animateType = TransitionAnimateTypeHide;
+    _currentInterActive = dismissed.hideInteractive;
+    return dismissed.transitionAnimate;
+}
+
+- (id<UIViewControllerInteractiveTransitioning>)interactionControllerForPresentation:(id<UIViewControllerAnimatedTransitioning>)animator
+{
+    return _currentInterActive.isDraging ? _currentInterActive : nil;
+}
+
+- (id<UIViewControllerInteractiveTransitioning>)interactionControllerForDismissal:(id<UIViewControllerAnimatedTransitioning>)animator
+{
+    return _currentInterActive.isDraging ? _currentInterActive : nil;
 }
 
 #pragma mark - 重写UIPresentationController方法
@@ -69,6 +84,7 @@
 
 // 消失转场开始
 - (void)dismissalTransitionWillBegin {
+    
     id<UIViewControllerTransitionCoordinator> transitionCoordinator = self.presentingViewController.transitionCoordinator;
     [transitionCoordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
         self.shadowView.alpha = 0.0;
@@ -77,6 +93,7 @@
 
 // 消失转场结束
 - (void)dismissalTransitionDidEnd:(BOOL)completed {
+    
     if (completed) {
         [self.shadowView removeFromSuperview];
         self.shadowView = nil;
@@ -161,13 +178,6 @@
         [_shadowView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(clickShadowView:)]];
     }
     return _shadowView;
-}
-
-- (LBLAnimatedTransitioning *)animTransition {
-    if (!_animTransition) {
-        _animTransition = [[LBLAnimatedTransitioning alloc] init];
-    }
-    return _animTransition;
 }
 
 @end

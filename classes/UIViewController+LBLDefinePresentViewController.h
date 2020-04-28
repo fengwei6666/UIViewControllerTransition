@@ -11,17 +11,14 @@
 
 @interface UIViewController (LBLDefinePresentViewController)
 
-// 自定义转场(默认从左至右)
+// 自定义转场(默认从底部向上弹出)
 - (void)lblDefinePresentViewController:(UIViewController *)viewController;
 
-- (void)lblDefinePresentViewController:(UIViewController *)viewController formDirection:(TransitionDirection)direction;
+- (void)lblDefinePresentViewController:(UIViewController *)viewController formDirection:(TranslateDirection)direction;
 
-- (void)lblDefinePresentViewController:(UIViewController *)viewController animate:(BOOL)animate
-                         formDirection:(TransitionDirection)direction;
-
-// 添加返回手势
-- (void)addBackGesture;
-// 移除返回手势
-- (void)removeBackGesture;
+- (void)lblDefinePresentViewController:(UIViewController *)viewController
+                         formDirection:(TranslateDirection)direction
+                               animate:(BOOL)animate
+                            completion:(void(^)(void))completion;
 
 @end
